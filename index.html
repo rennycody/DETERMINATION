@@ -2,21 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>DETERMINATION</title>
+
+  <!-- NEW: makes it installable as an app -->
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="A retro-RPG habit tracker with a pet monster, focus timer and shop.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Determination">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- NEW: animated background layer (sits behind everything, stays transparent) -->
+  <canvas id="bg" aria-hidden="true"></canvas>
+
   <div id="game">
 
     <!-- STATUS BAR -->
     <header id="status">
-      <canvas id="soul" width="8" height="7"></canvas>
-      <span class="name">CHARA</span>
-      <span id="lv">LV 1</span>
+      <!-- NEW: your pet monster (click it!) -->
+      <button id="pet-btn" class="petbtn" aria-label="Pet your monster">
+        <canvas id="pet" width="12" height="12"></canvas>
+      </button>
+
+      <div class="who">
+        <div class="whorow">
+          <canvas id="soul" width="8" height="7"></canvas>
+          <!-- NEW: click your name to rename -->
+          <button id="name-btn" class="linkbtn" title="Click to rename">FRIEND</button>
+        </div>
+        <div class="whorow">
+          <span id="lv">LV 1</span>
+          <span class="coin" id="coins">0</span>
+        </div>
+      </div>
+
       <div class="bars">
         <div class="barrow">
           <span class="label">HP</span>
@@ -31,13 +60,82 @@
       </div>
     </header>
 
-    <!-- HABIT LIST -->
-    <section id="habits-box" class="box">
+    <!-- NEW: STREAK BAR -->
+    <section id="streak" class="box">
+      <div class="streak-head">
+        <span>STREAK</span>
+        <span id="streak-count">0 DAYS</span>
+      </div>
+      <div id="streak-days"></div>
+    </section>
+
+    <!-- NEW: TABS -->
+    <nav id="tabs">
+      <button class="tab active" data-tab="habits">HABITS</button>
+      <button class="tab" data-tab="focus">FOCUS</button>
+      <button class="tab" data-tab="shop">SHOP</button>
+      <button class="tab" data-tab="trophies">TROPHIES</button>
+    </nav>
+
+    <!-- HABIT LIST (same as before, now a tab panel) -->
+    <section id="panel-habits" class="panel box">
       <ul id="habits"></ul>
       <form id="add-form">
         <input id="new-habit" type="text" maxlength="28" placeholder="New habit..." autocomplete="off">
         <button type="submit">ADD</button>
       </form>
+    </section>
+
+    <!-- NEW: FOCUS TIMER -->
+    <section id="panel-focus" class="panel box" hidden>
+      <div class="focus-top">
+        <canvas id="sprout" width="16" height="16"></canvas>
+        <div id="timer">25:00</div>
+      </div>
+
+      <div class="presets">
+        <button class="preset" data-min="5">5</button>
+        <button class="preset" data-min="15">15</button>
+        <button class="preset sel" data-min="25">25</button>
+        <button class="preset" data-min="45">45</button>
+        <span class="small">MIN</span>
+      </div>
+
+      <button id="focus-btn" class="wide">START</button>
+
+      <div class="egg-row">
+        <canvas id="egg" width="10" height="12"></canvas>
+        <div class="egg-info">
+          <div class="small">EGG: FOCUS 60 MIN TO HATCH</div>
+          <div class="bar"><div id="eggfill" class="fill xp"></div></div>
+          <div id="eggtext" class="small">0 / 60 MIN</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW: SHOP / INVENTORY -->
+    <section id="panel-shop" class="panel box" hidden>
+      <div class="shop-head">
+        <span>SHOP</span>
+        <span class="coin" id="shop-coins">0</span>
+      </div>
+      <div id="shop-tabs">
+        <button class="stab active" data-shop="monsters">MONSTERS</button>
+        <button class="stab" data-shop="hats">HATS</button>
+        <button class="stab" data-shop="colors">COLORS</button>
+        <button class="stab" data-shop="bgs">STYLES</button>
+        <button class="stab" data-shop="items">ITEMS</button>
+      </div>
+      <div id="shop-list"></div>
+    </section>
+
+    <!-- NEW: TROPHIES -->
+    <section id="panel-trophies" class="panel box" hidden>
+      <div class="shop-head">
+        <span>TROPHIES</span>
+        <span id="trophy-count">0 / 0</span>
+      </div>
+      <ul id="trophy-list"></ul>
     </section>
 
     <!-- DIALOGUE BOX -->
@@ -49,6 +147,7 @@
     <nav id="menu">
       <button id="save-btn" class="menu-btn">SAVE</button>
       <button id="mute-btn" class="menu-btn">SOUND: ON</button>
+      <button id="install-btn" class="menu-btn" hidden>INSTALL APP</button>
     </nav>
 
   </div>
