@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DETERMINATION</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game">
+
+    <!-- STATUS BAR -->
+    <header id="status">
+      <canvas id="soul" width="8" height="7"></canvas>
+      <span class="name">CHARA</span>
+      <span id="lv">LV 1</span>
+      <div class="bars">
+        <div class="barrow">
+          <span class="label">HP</span>
+          <div class="bar"><div id="hpfill" class="fill hp"></div></div>
+          <span id="hptext">20 / 20</span>
+        </div>
+        <div class="barrow">
+          <span class="label">XP</span>
+          <div class="bar"><div id="xpfill" class="fill xp"></div></div>
+          <span id="xptext">0 / 50</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- HABIT LIST -->
+    <section id="habits-box" class="box">
+      <ul id="habits"></ul>
+      <form id="add-form">
+        <input id="new-habit" type="text" maxlength="28" placeholder="New habit..." autocomplete="off">
+        <button type="submit">ADD</button>
+      </form>
+    </section>
+
+    <!-- DIALOGUE BOX -->
+    <section id="dialogue" class="box">
+      <p id="text"></p>
+    </section>
+
+    <!-- BOTTOM MENU -->
+    <nav id="menu">
+      <button id="save-btn" class="menu-btn">SAVE</button>
+      <button id="mute-btn" class="menu-btn">SOUND: ON</button>
+    </nav>
+
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

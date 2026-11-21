@@ -1,0 +1,186 @@
+/* ---------- BASE ---------- */
+* { box-sizing: border-box; }
+
+:root {
+  --white: #ffffff;
+  --yellow: #ffff00;
+  --red: #ff0000;
+  --orange: #ff7f27;
+  --bar-bg: #c00000;
+  --xp: #00a2e8;
+}
+
+html, body {
+  margin: 0;
+  background: #000;
+  color: var(--white);
+  font-family: "Press Start 2P", "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  image-rendering: pixelated;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+}
+
+#game {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------- THE CLASSIC WHITE BORDERED BOX ---------- */
+.box {
+  border: 4px solid var(--white);
+  padding: 16px;
+  background: #000;
+}
+
+/* ---------- STATUS BAR ---------- */
+#status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+}
+
+#soul {
+  width: 32px;          /* 8 px * 4 scale */
+  height: 28px;         /* 7 px * 4 scale */
+  image-rendering: pixelated;
+}
+
+.name { letter-spacing: 1px; }
+#lv   { margin-right: auto; }
+
+.bars { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+.barrow { display: flex; align-items: center; gap: 12px; }
+.label { width: 28px; font-size: 10px; }
+
+.bar {
+  flex: 1;
+  height: 20px;
+  background: var(--bar-bg);
+  border: 0;
+}
+.fill { height: 100%; width: 100%; transition: width 0.3s steps(6); }
+.fill.hp { background: var(--yellow); }
+.fill.xp { background: var(--xp); }
+
+#hptext, #xptext { font-size: 10px; min-width: 84px; text-align: right; }
+
+/* ---------- HABITS ---------- */
+#habits { list-style: none; margin: 0 0 16px; padding: 0; }
+
+#habits li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 8px 8px 32px;
+  position: relative;
+  cursor: pointer;
+}
+
+/* The little red heart cursor, drawn as an SVG data URI */
+#habits li:hover::before,
+#habits li:focus-within::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  width: 16px;
+  height: 14px;
+  margin-top: -7px;
+  image-rendering: pixelated;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 7' shape-rendering='crispEdges'%3E%3Cg fill='%23ff0000'%3E%3Crect x='1' y='0' width='2' height='1'/%3E%3Crect x='5' y='0' width='2' height='1'/%3E%3Crect x='0' y='1' width='8' height='3'/%3E%3Crect x='1' y='4' width='6' height='1'/%3E%3Crect x='2' y='5' width='4' height='1'/%3E%3Crect x='3' y='6' width='2' height='1'/%3E%3C/g%3E%3C/svg%3E") no-repeat center / contain;
+}
+
+#habits li.done .habit-name { color: var(--yellow); }
+
+.check {
+  width: 24px;
+  height: 24px;
+  border: 4px solid var(--white);
+  background: #000;
+  color: var(--yellow);
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.done .check { background: var(--white); color: #000; }
+
+.habit-name { flex: 1; word-break: break-word; }
+.streak { font-size: 10px; color: var(--orange); white-space: nowrap; }
+
+.del {
+  background: none;
+  border: 0;
+  color: #777;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.del:hover { color: var(--red); }
+
+/* ---------- ADD FORM ---------- */
+#add-form { display: flex; gap: 12px; }
+
+input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  background: #000;
+  color: var(--white);
+  border: 4px solid var(--white);
+  font-family: inherit;
+  font-size: 12px;
+  padding: 8px;
+  outline: none;
+}
+input[type="text"]:focus { border-color: var(--yellow); }
+
+button {
+  font-family: inherit;
+  font-size: 12px;
+  background: #000;
+  color: var(--white);
+  border: 4px solid var(--white);
+  padding: 8px 12px;
+  cursor: pointer;
+}
+button:hover, button:focus-visible { color: var(--yellow); border-color: var(--yellow); outline: none; }
+
+/* ---------- DIALOGUE ---------- */
+#dialogue { min-height: 120px; }
+#text { margin: 0; white-space: pre-wrap; }
+
+/* ---------- BOTTOM MENU ---------- */
+#menu { display: flex; gap: 16px; flex-wrap: wrap; }
+.menu-btn { flex: 1; min-width: 120px; }
+
+/* ---------- EFFECTS ---------- */
+@keyframes flash {
+  0%   { background: #fff; }
+  100% { background: #000; }
+}
+body.flash { animation: flash 0.4s steps(4); }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-6px); }
+  75%      { transform: translateX(6px); }
+}
+#game.shake { animation: shake 0.3s steps(4); }
+
+@media (max-width: 480px) {
+  html, body { font-size: 10px; }
+  .box { padding: 12px; }
+}
