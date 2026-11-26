@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>DETERMINATION</title>
 
-  <!-- NEW: makes it installable as an app -->
   <meta name="theme-color" content="#000000">
-  <meta name="description" content="A retro-RPG habit tracker with a pet monster, focus timer and shop.">
+  <meta name="description" content="A retro-RPG habit tracker with a pet monster, focus timer, eggs and leaderboards.">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon-192.png">
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -22,14 +21,12 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- NEW: animated background layer (sits behind everything, stays transparent) -->
   <canvas id="bg" aria-hidden="true"></canvas>
 
   <div id="game">
 
     <!-- STATUS BAR -->
     <header id="status">
-      <!-- NEW: your pet monster (click it!) -->
       <button id="pet-btn" class="petbtn" aria-label="Pet your monster">
         <canvas id="pet" width="12" height="12"></canvas>
       </button>
@@ -37,7 +34,6 @@
       <div class="who">
         <div class="whorow">
           <canvas id="soul" width="8" height="7"></canvas>
-          <!-- NEW: click your name to rename -->
           <button id="name-btn" class="linkbtn" title="Click to rename">FRIEND</button>
         </div>
         <div class="whorow">
@@ -60,7 +56,7 @@
       </div>
     </header>
 
-    <!-- NEW: STREAK BAR -->
+    <!-- STREAK BAR -->
     <section id="streak" class="box">
       <div class="streak-head">
         <span>STREAK</span>
@@ -69,24 +65,39 @@
       <div id="streak-days"></div>
     </section>
 
-    <!-- NEW: TABS -->
+    <!-- TABS -->
     <nav id="tabs">
       <button class="tab active" data-tab="habits">HABITS</button>
+      <button class="tab" data-tab="quests" id="tab-quests">QUESTS</button>
       <button class="tab" data-tab="focus">FOCUS</button>
+      <button class="tab" data-tab="eggs">EGGS</button>
+      <button class="tab" data-tab="cavern">CAVERN</button>
       <button class="tab" data-tab="shop">SHOP</button>
-      <button class="tab" data-tab="trophies">TROPHIES</button>
+      <button class="tab" data-tab="trophies">TROPHY</button>
+      <button class="tab" data-tab="online">ONLINE</button>
     </nav>
 
-    <!-- HABIT LIST (same as before, now a tab panel) -->
+    <!-- HABITS -->
     <section id="panel-habits" class="panel box">
       <ul id="habits"></ul>
       <form id="add-form">
         <input id="new-habit" type="text" maxlength="28" placeholder="New habit..." autocomplete="off">
         <button type="submit">ADD</button>
       </form>
+      <div class="small chip-label">QUICK ADD:</div>
+      <div id="chips" class="chips"></div>
     </section>
 
-    <!-- NEW: FOCUS TIMER -->
+    <!-- QUESTS -->
+    <section id="panel-quests" class="panel box" hidden>
+      <div class="shop-head"><span>DAILY QUESTS</span><span class="small">RESET AT MIDNIGHT</span></div>
+      <ul id="quest-daily" class="qlist"></ul>
+      <div class="shop-head qgap"><span>WEEKLY QUESTS</span><span class="small">RESET MONDAY</span></div>
+      <ul id="quest-weekly" class="qlist"></ul>
+      <p id="econ-note" class="small note"></p>
+    </section>
+
+    <!-- FOCUS TIMER -->
     <section id="panel-focus" class="panel box" hidden>
       <div class="focus-top">
         <canvas id="sprout" width="16" height="16"></canvas>
@@ -106,36 +117,93 @@
       <div class="egg-row">
         <canvas id="egg" width="10" height="12"></canvas>
         <div class="egg-info">
-          <div class="small">EGG: FOCUS 60 MIN TO HATCH</div>
+          <div id="eggname" class="small">CAVE EGG: FOCUS 60 MIN TO HATCH</div>
           <div class="bar"><div id="eggfill" class="fill xp"></div></div>
           <div id="eggtext" class="small">0 / 60 MIN</div>
         </div>
       </div>
+      <button id="change-egg" class="wide small-btn">CHANGE EGG</button>
     </section>
 
-    <!-- NEW: SHOP / INVENTORY -->
+    <!-- EGGS -->
+    <section id="panel-eggs" class="panel box" hidden>
+      <div class="shop-head"><span>EGGS</span><span class="coin" id="egg-coins">0</span></div>
+      <p class="small note">PICK AN EGG TO INCUBATE. FOCUS TIME WARMS IT. EACH EGG HATCHES DIFFERENT MONSTERS.</p>
+      <div id="egg-list"></div>
+    </section>
+
+    <!-- CAVERN (hatched monsters by day) -->
+    <section id="panel-cavern" class="panel box" hidden>
+      <div class="shop-head"><span>THE CAVERN</span><span id="dex-count" class="small">0 / 0</span></div>
+      <div id="dex" class="dex"></div>
+      <div id="fields"></div>
+      <button id="more-days" class="wide small-btn" hidden>SHOW OLDER DAYS</button>
+    </section>
+
+    <!-- SHOP -->
     <section id="panel-shop" class="panel box" hidden>
       <div class="shop-head">
         <span>SHOP</span>
         <span class="coin" id="shop-coins">0</span>
       </div>
       <div id="shop-tabs">
-        <button class="stab active" data-shop="monsters">MONSTERS</button>
+        <button class="stab active" data-shop="pets">PETS</button>
         <button class="stab" data-shop="hats">HATS</button>
         <button class="stab" data-shop="colors">COLORS</button>
         <button class="stab" data-shop="bgs">STYLES</button>
+        <button class="stab" data-shop="frames">FRAMES</button>
+        <button class="stab" data-shop="voices">VOICES</button>
         <button class="stab" data-shop="items">ITEMS</button>
       </div>
       <div id="shop-list"></div>
     </section>
 
-    <!-- NEW: TROPHIES -->
+    <!-- TROPHIES -->
     <section id="panel-trophies" class="panel box" hidden>
       <div class="shop-head">
         <span>TROPHIES</span>
         <span id="trophy-count">0 / 0</span>
       </div>
       <ul id="trophy-list"></ul>
+    </section>
+
+    <!-- ONLINE: account + leaderboards -->
+    <section id="panel-online" class="panel box" hidden>
+      <div class="shop-head"><span>ACCOUNT</span><span id="acct-status" class="small">GUEST</span></div>
+
+      <p id="acct-off" class="small note" hidden></p>
+
+      <form id="acct-form" hidden>
+        <input id="acct-email-in" type="email" placeholder="email" autocomplete="email" maxlength="120">
+        <input id="acct-pass" type="password" placeholder="password (6+ characters)" autocomplete="current-password" maxlength="100">
+        <div class="btnrow">
+          <button type="submit" id="acct-signin">SIGN IN</button>
+          <button type="button" id="acct-signup">CREATE ACCOUNT</button>
+        </div>
+        <button type="button" id="acct-google" class="wide">CONTINUE WITH GOOGLE</button>
+        <button type="button" id="acct-reset" class="linkbtn small-link">FORGOT PASSWORD?</button>
+      </form>
+
+      <div id="acct-in" hidden>
+        <p class="small note">SIGNED IN AS <span id="acct-email"></span><br><span id="sync-status">NOT SYNCED YET</span></p>
+        <div class="btnrow">
+          <button type="button" id="acct-sync">SYNC NOW</button>
+          <button type="button" id="acct-out">SIGN OUT</button>
+        </div>
+        <button type="button" id="acct-delete" class="linkbtn small-link danger">DELETE MY ONLINE ACCOUNT</button>
+      </div>
+
+      <label class="chk small"><input type="checkbox" id="lb-opt" checked> SHOW MY NICKNAME + STATS ON LEADERBOARDS</label>
+      <p class="small note">WE STORE: YOUR EMAIL (FOR LOGIN), YOUR GAME SAVE, AND, IF TICKED, YOUR NICKNAME + STATS. USE A NICKNAME, NOT YOUR REAL NAME.</p>
+
+      <div class="shop-head qgap"><span>LEADERBOARD</span><button id="lb-refresh" class="small-btn">REFRESH</button></div>
+      <div id="lb-tabs">
+        <button class="stab active" data-lb="totalXp">XP</button>
+        <button class="stab" data-lb="focusMin">FOCUS</button>
+        <button class="stab" data-lb="bestStreak">STREAK</button>
+        <button class="stab" data-lb="hatched">HATCHED</button>
+      </div>
+      <ol id="lb-list"></ol>
     </section>
 
     <!-- DIALOGUE BOX -->
@@ -151,6 +219,9 @@
     </nav>
 
   </div>
+
   <script src="script.js"></script>
+  <!-- online features (accounts + leaderboards). The game works without it. -->
+  <script type="module" src="cloud.js"></script>
 </body>
 </html>
