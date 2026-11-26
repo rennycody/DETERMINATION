@@ -1,7 +1,7 @@
 /* Service worker: lets the app load offline and install like a real app.
    Change the version number below whenever you update your files. */
-const CACHE = "determination-v3";
-const CORE = ["./", "index.html", "style.css", "script.js", "cloud.js", "firebase-config.js", "manifest.json", "icon-192.png", "icon-512.png"];
+const CACHE = "determination-v4";
+const CORE = ["./", "index.html", "style.css", "script.js", "cloud.js", "manifest.json", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((c) => c.addAll(CORE)));
